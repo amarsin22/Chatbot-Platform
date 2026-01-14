@@ -11,7 +11,7 @@ connectDB()
 
 const app = express()
 
-app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174"] }))
+app.use(cors({ origin: ["http://localhost:5173", "https://chatbot-platform-hk6l.vercel.app/"] }))
 app.use(express.json())
 
 app.use("/api/auth", require("./routes/auth.routes"))
