@@ -41,10 +41,10 @@ Chatbot-Platform is a **modular chatbot application** designed to offer conversa
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | HTML, CSS, JavaScript (likely React/Vite/Next) |
+| Frontend | HTML, CSS, JavaScript (likely React/Vite) |
 | Backend | Node.js/Express or your preferred API framework |
 | Deployment | Vercel for frontend (and backend proxies if used) |
-| Communication | REST API / WebSockets |
+| Communication | REST API |
 
 > *If your repo uses a specific framework (e.g., React, Next.js, Express), update this table accordingly.*
 
