@@ -1,6 +1,6 @@
 # Chatbot-Platform
 
-A full-stack **Chatbot Platform** with frontend and backend components — built to allow users to interact with an intelligent bot interface and extendable for real-world conversational applications. :contentReference[oaicite:0]{index=0}
+A full-stack **Chatbot Platform** with frontend and backend components built to allow users to interact with an intelligent bot interface and extendable for real-world conversational applications. :contentReference[oaicite:0]{index=0}
 
 ## 🚀 Live Demo
 
