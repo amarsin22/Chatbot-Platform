@@ -10,14 +10,15 @@ A full-stack **Chatbot Platform** with frontend and backend components built to 
 
 ## 📌 Table of Contents
 
-- [About](#about)  
+[About](#about)  
 - [Features](#features)  
 - [Tech Stack](#tech-stack)  
 - [Getting Started](#getting-started)  
   - [Prerequisites](#prerequisites)  
   - [Installation](#installation)  
+  - [Running the App](#running-the-app)  
 - [Project Structure](#project-structure)  
-- [Usage](#usage)  
+- [Usage](#usage)   
 
 ---
 
@@ -60,7 +61,6 @@ Install the following tools:
 
 - Node.js (v14+)
 - npm or yarn
-- (Optional) Docker
 
 ### Installation
 
@@ -68,6 +68,16 @@ Install the following tools:
    ```bash
    git clone https://github.com/amarsin22/Chatbot-Platform.git
    cd Chatbot-Platform
+
+## Running the App
+
+Run backend server
+cd backend
+npm run dev
+
+Run frontend
+cd frontend
+npm start
 
 ## 🗂 Project Structure
 
