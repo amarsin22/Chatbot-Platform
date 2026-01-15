@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import {
   Menu,
   X,
@@ -7,10 +8,27 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
+import api from "../services/api"
 
 export default function DashboardLayout({ children }) {
-  const [open, setOpen] = useState(false)          // mobile
-  const [collapsed, setCollapsed] = useState(false) // desktop
+  const [open, setOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+  const [projects, setProjects] = useState([])
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  // 🔄 Load projects for chat list
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const res = await api.get("/projects")
+        setProjects(res.data)
+      } catch (err) {
+        console.error("Sidebar projects failed")
+      }
+    }
+    loadProjects()
+  }, [])
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
@@ -27,8 +45,8 @@ export default function DashboardLayout({ children }) {
         className={`
           fixed z-50 inset-y-0 left-0
           ${collapsed ? "w-16" : "w-64"}
-          bg-gradient-to-b from-slate-900 to-slate-800 text-white
-          transform transition-all duration-300 ease-in-out
+          bg-slate-900 text-white
+          transition-all duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0 lg:static
         `}
@@ -36,12 +54,11 @@ export default function DashboardLayout({ children }) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
           {!collapsed && (
-            <h1 className="text-lg font-semibold tracking-wide truncate">
+            <h1 className="font-semibold text-lg truncate">
               Chatbot Platform
             </h1>
           )}
 
-          {/* Desktop collapse button */}
           <button
             onClick={() => setCollapsed((p) => !p)}
             className="hidden lg:block text-white/70 hover:text-white"
@@ -49,28 +66,42 @@ export default function DashboardLayout({ children }) {
             {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </button>
 
-          {/* Mobile close */}
           <button
             onClick={() => setOpen(false)}
-            className="lg:hidden text-white"
+            className="lg:hidden"
           >
             <X size={22} />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="px-2 py-4 space-y-2">
-          <NavItem
+        <nav className="px-2 py-4 space-y-1">
+          <SidebarItem
             icon={<LayoutDashboard size={18} />}
             label="Projects"
             collapsed={collapsed}
+            active={location.pathname.startsWith("/dashboard")}
+            onClick={() => navigate("/dashboard")}
           />
 
-          <NavItem
-            icon={<MessageSquare size={18} />}
-            label="Chats"
-            collapsed={collapsed}
-          />
+          {/* Divider */}
+          {!collapsed && (
+            <div className="text-xs text-white/40 px-3 mt-4 mb-1">
+              Chats
+            </div>
+          )}
+
+          {/* Chat List */}
+          <div className="space-y-1 max-h-[60vh] overflow-y-auto">
+            {projects.map((project) => (
+              <SidebarChatItem
+                key={project._id}
+                project={project}
+                collapsed={collapsed}
+                active={location.pathname === `/chat/${project._id}`}
+              />
+            ))}
+          </div>
         </nav>
       </aside>
 
@@ -81,7 +112,7 @@ export default function DashboardLayout({ children }) {
           <button onClick={() => setOpen(true)}>
             <Menu size={22} />
           </button>
-          <span className="font-semibold">Projects</span>
+          <span className="font-semibold">Chatbot</span>
         </header>
 
         <main className="flex-1 overflow-y-auto">{children}</main>
@@ -90,30 +121,36 @@ export default function DashboardLayout({ children }) {
   )
 }
 
-/* ---------------- Nav Item ---------------- */
+/* ---------------- Sidebar Items ---------------- */
 
-function NavItem({ icon, label, collapsed }) {
+function SidebarItem({ icon, label, collapsed, active, onClick }) {
   return (
     <button
-      className="
-        flex items-center gap-3 w-full
-        px-3 py-2 rounded-md
-        hover:bg-white/10
-        transition-colors
-        text-sm
-      "
+      onClick={onClick}
+      className={`
+        flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm
+        ${active ? "bg-white/15" : "hover:bg-white/10"}
+      `}
     >
-      <span className="min-w-[20px]">{icon}</span>
-
-      {/* Smooth label animation */}
-      <span
-        className={`
-          transition-all duration-300
-          ${collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-auto"}
-        `}
-      >
-        {label}
-      </span>
+      {icon}
+      {!collapsed && <span>{label}</span>}
     </button>
+  )
+}
+
+function SidebarChatItem({ project, collapsed, active }) {
+  return (
+    <NavLink
+      to={`/chat/${project._id}`}
+      className={`
+        flex items-center gap-2 px-3 py-2 rounded-md text-sm truncate
+        ${active ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/10"}
+      `}
+    >
+      <MessageSquare size={14} />
+      {!collapsed && (
+        <span className="truncate">{project.name}</span>
+      )}
+    </NavLink>
   )
 }
