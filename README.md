@@ -71,11 +71,11 @@ Install the following tools:
 
 ## Running the App
 
-Run backend server
+#Run backend server
 cd backend
 npm run dev
 
-Run frontend
+#Run frontend
 cd frontend
 npm start
 
