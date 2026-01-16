@@ -1,13 +1,17 @@
 # Chatbot Platform
 
-A full-stack **Chatbot Platform** with separate frontend and backend components, built to enable users to interact with an intelligent chatbot interface. The project is designed to be easily extendable for real-world conversational applications.
+A full-stack **Chatbot Platform** with a clear separation between frontend and backend, designed to allow users to interact with an intelligent chatbot interface. The project is built with scalability and extensibility in mind, making it suitable for real-world conversational applications.
+
+---
 
 ## 🚀 Live Demo
+
 🔗 https://chatbot-platform-hk6l.vercel.app/
 
 ---
 
 ## 📌 Table of Contents
+
 - About  
 - Features  
 - Tech Stack  
@@ -19,12 +23,13 @@ A full-stack **Chatbot Platform** with separate frontend and backend components,
 
 ## 📖 About
 
-Chatbot Platform is a **modular chatbot application** that provides a scalable foundation for conversational systems. It follows a clean frontend–backend separation and can be extended to integrate AI models, third-party chat APIs, authentication, and persistent conversation storage.
+**Chatbot Platform** is a modular and scalable chatbot application that follows a clean frontend–backend architecture. It serves as a strong foundation for building conversational systems and can be extended to integrate AI/LLM models, third-party chat APIs, authentication, and persistent conversation storage.
 
 ---
 
 ## ✨ Features
-- Responsive chat user interface  
+
+- Responsive and modern chat user interface  
 - Real-time message handling  
 - Clean separation of frontend and backend  
 - Easily extensible for AI/NLP integration  
@@ -36,10 +41,10 @@ Chatbot Platform is a **modular chatbot application** that provides a scalable f
 
 | Layer | Technology |
 |------|-----------|
-| Frontend | React-vite, Tailwind.css |
+| Frontend | React (Vite), Tailwind CSS |
 | Backend | Node.js, Express.js |
-| API Communication | REST | OpenRouter API
-| Deployment | Vercel | Render
+| API Communication | REST, OpenRouter API |
+| Deployment | Vercel, Render |
 
 ---
 
@@ -48,55 +53,80 @@ Chatbot Platform is a **modular chatbot application** that provides a scalable f
 Follow the steps below to run the project locally.
 
 ### Prerequisites
+
 - Node.js (v14 or higher)
 - npm or yarn
 
 ### Installation
 
-1. Clone the repository
+1. **Clone the repository**
 ```bash
 git clone https://github.com/amarsin22/Chatbot-Platform.git
 cd Chatbot-Platform
 ```
 2. Install backend dependencies
    cd backend
-   npm install
-
-3. Install frontend dependencies
+   npm install   
+4. Install frontend dependencies
    cd ../frontend
    npm install
 
-## Running the Application
-~Start the backend server
+## ▶️ Running the Application
+1. Start the backend server
    cd backend
    npm run dev
-~Start the frontend
+2. Start the frontend application
    cd frontend
-   npm start
+   npm run dev
 
 ## 🗂 Project Structure
 
 Chatbot-Platform/
+│
 ├── backend/
-│   ├── controllers/
-│   ├── routes/
-│   ├── models/
-│   └── server.js
+│   ├── config/              # Configuration files (DB, API keys, app config)
+│   ├── controllers/         # Request handling & business logic
+│   ├── middleware/          # Custom middlewares (auth, error handling)
+│   ├── models/              # Database models / schemas
+│   ├── routes/              # API route definitions
+│   ├── node_modules/
+│   ├── .env                 # Environment variables
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js            # Backend entry point
+│
 ├── frontend/
-│   ├── public/
+│   ├── public/              # Static assets
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── App.js
-├── .gitignore
-├── README.md
-└── package.json
+│   │   ├── assets/          # Images, icons, fonts
+│   │   ├── components/      # Reusable UI components
+│   │   ├── layouts/         # Layout components (wrappers, shells)
+│   │   ├── pages/           # Application pages
+│   │   ├── services/        # API calls & service logic
+│   │   ├── utils/           # Helper & utility functions
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx         # Frontend entry point
+│   │
+│   ├── node_modules/
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   └── package-lock.json
+│
+└── README.md
 
 ## 📌 Usage
-
 1. Open the frontend application in your browser.
 2. Enter a message in the chat input field.
 3. The message is sent to the backend API.
 4. The backend processes the request and returns a response (placeholder logic or integrated AI).
+
+## 👨‍💻 Author
+   Amar Singh
+   GitHub: https://github.com/amarsin22
 
 
