@@ -102,7 +102,7 @@ function ParallaxHero() {
         className="mt-6 max-w-2xl mx-auto text-gray-300 text-lg"
       >
         Create, manage, and interact with AI chatbots across multiple
-        projects — all in one elegant platform.
+        projects - all in one elegant platform.
       </motion.p>
 
       <motion.div
