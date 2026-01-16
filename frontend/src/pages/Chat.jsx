@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import api from "../services/api"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function Chat() {
   const { projectId } = useParams()
@@ -21,7 +22,7 @@ export default function Chat() {
   // 🔽 Auto scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  }, [messages, loading])
 
   // 📩 Load chat history
   useEffect(() => {
@@ -61,13 +62,12 @@ export default function Chat() {
     })
   }
 
-  // 📤 Send message (NON-STREAMING, STABLE)
+  // 📤 Send message
   const sendMessage = async () => {
     if (!input.trim() || loading) return
 
     const userMessage = input.trim()
 
-    // Optimistic UI
     setMessages((prev) => [
       ...prev,
       {
@@ -95,63 +95,74 @@ export default function Chat() {
     }
   }
 
-  // 📅 Render with date separators
+  // 📅 Date separator helper
   let lastDate = ""
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Header */}
+      {/* HEADER */}
       <div className="sticky top-0 z-10 bg-white border-b px-4 py-3 flex items-center gap-3">
         <button
           onClick={() => navigate("/dashboard")}
-          className="text-blue-600 text-sm"
+          className="text-blue-600 text-sm hover:underline"
         >
           ← Projects
         </button>
         <h2 className="font-semibold truncate">Project Chat</h2>
       </div>
 
-      {/* Messages */}
+      {/* MESSAGES */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-        {messages.map((msg, index) => {
-          const dateLabel = getDateLabel(msg.createdAt)
-          const showDate = dateLabel !== lastDate
-          lastDate = dateLabel
+        <AnimatePresence>
+          {messages.map((msg, index) => {
+            const dateLabel = getDateLabel(msg.createdAt)
+            const showDate = dateLabel !== lastDate
+            lastDate = dateLabel
 
-          return (
-            <div key={msg._id || index}>
-              {showDate && (
-                <div className="text-center text-xs text-gray-500 my-3">
-                  {dateLabel}
-                </div>
-              )}
+            return (
+              <div key={msg._id || index}>
+                {showDate && (
+                  <div className="text-center text-xs text-gray-500 my-3">
+                    {dateLabel}
+                  </div>
+                )}
 
-              <div
-                className={`max-w-[80%] md:max-w-[60%] px-4 py-2 rounded-2xl text-sm ${
-                  msg.role === "user"
-                    ? "ml-auto bg-blue-600 text-white rounded-br-none"
-                    : "bg-white text-gray-800 rounded-bl-none shadow"
-                }`}
-              >
-                {msg.content}
-                <div className="text-[10px] text-right opacity-70 mt-1">
-                  {formatTime(msg.createdAt)}
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`max-w-[80%] md:max-w-[60%] px-4 py-2 rounded-2xl text-sm ${
+                    msg.role === "user"
+                      ? "ml-auto bg-blue-600 text-white rounded-br-none"
+                      : "bg-white text-gray-800 rounded-bl-none shadow"
+                  }`}
+                >
+                  {msg.content}
+                  <div className="text-[10px] text-right opacity-70 mt-1">
+                    {formatTime(msg.createdAt)}
+                  </div>
+                </motion.div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </AnimatePresence>
 
+        {/* Typing indicator */}
         {loading && (
-          <div className="bg-white text-gray-400 px-4 py-2 rounded-2xl w-fit shadow italic text-sm">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white text-gray-400 px-4 py-2 rounded-2xl w-fit shadow italic text-sm"
+          >
             AI is typing…
-          </div>
+          </motion.div>
         )}
 
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
+      {/* INPUT */}
       <div className="sticky bottom-0 bg-white border-t px-3 py-2">
         <div className="flex gap-2">
           <input
@@ -159,12 +170,12 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             placeholder="Type your message…"
-            className="flex-1 border rounded-full px-4 py-2 text-sm"
+            className="flex-1 border rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500"
           />
           <button
             onClick={sendMessage}
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm"
+            className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700 disabled:opacity-60"
           >
             Send
           </button>
