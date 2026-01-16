@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import AuthLayout from "../components/AuthLayout"
-import Toast from "../components/Toast"
-import api from "../services/api"
+import { motion } from "framer-motion"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
+import AuthLayout from "../components/AuthLayout"
+import api from "../services/api"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -12,13 +12,14 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState(null)
+  const [error, setError] = useState("")
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    setError("")
 
     if (!email || !password) {
-      setToast({ type: "error", message: "All fields are required" })
+      setError("All fields are required")
       return
     }
 
@@ -26,15 +27,9 @@ export default function Login() {
       setLoading(true)
       const res = await api.post("/auth/login", { email, password })
       localStorage.setItem("token", res.data.token)
-
-      setToast({ type: "success", message: "Login successful 🎉" })
-
-      setTimeout(() => navigate("/dashboard"), 800)
+      navigate("/dashboard")
     } catch (err) {
-      setToast({
-        type: "error",
-        message: err.response?.data?.message || "Login failed",
-      })
+      setError(err.response?.data?.message || "Login failed")
     } finally {
       setLoading(false)
     }
@@ -42,24 +37,33 @@ export default function Login() {
 
   return (
     <AuthLayout
-      title="Welcome back 👋"
-      subtitle="Login to your Chatbot Platform"
+      title="Welcome Back 👋"
+      subtitle="Login to your AI Chatbot Platform"
     >
-      {toast && (
-        <Toast
-          type={toast.type}
-          message={toast.message}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <motion.form
+        onSubmit={handleLogin}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="space-y-4"
+      >
+        {error && (
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            className="bg-red-50 text-red-600 text-sm p-2 rounded-lg"
+          >
+            {error}
+          </motion.div>
+        )}
 
-      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+          className="w-full border rounded-lg px-4 py-2 text-sm 
+          focus:ring-2 focus:ring-indigo-500"
         />
 
         <div className="relative">
@@ -68,7 +72,8 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            className="w-full border rounded-lg px-4 py-2 text-sm 
+            focus:ring-2 focus:ring-indigo-500"
           />
           <button
             type="button"
@@ -79,21 +84,24 @@ export default function Login() {
           </button>
         </div>
 
-        <button
+        <motion.button
+          whileTap={{ scale: 0.97 }}
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-60 flex items-center justify-center gap-2"
+          className="w-full bg-indigo-600 text-white py-2 rounded-lg 
+          text-sm font-semibold hover:bg-indigo-700 
+          disabled:opacity-60 flex items-center justify-center gap-2"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           Login
-        </button>
+        </motion.button>
 
         <p className="text-sm text-center text-gray-500">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-600 font-medium">
+          <Link to="/register" className="text-indigo-600 font-medium">
             Register
           </Link>
         </p>
-      </form>
+      </motion.form>
     </AuthLayout>
   )
 }
