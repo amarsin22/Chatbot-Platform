@@ -36,10 +36,10 @@ Chatbot Platform is a **modular chatbot application** that provides a scalable f
 
 | Layer | Technology |
 |------|-----------|
-| Frontend | React.js, HTML, CSS, JavaScript |
+| Frontend | React-vite, Tailwind.css |
 | Backend | Node.js, Express.js |
-| API Communication | REST |
-| Deployment | Vercel |
+| API Communication | REST | OpenRouter API
+| Deployment | Vercel | Render
 
 ---
 
