@@ -1,93 +1,88 @@
-# Chatbot-Platform
+# Chatbot Platform
 
-A full-stack **Chatbot Platform** with frontend and backend components built to allow users to interact with an intelligent bot interface and extendable for real-world conversational applications. :contentReference[oaicite:0]{index=0}
+A full-stack **Chatbot Platform** with separate frontend and backend components, built to enable users to interact with an intelligent chatbot interface. The project is designed to be easily extendable for real-world conversational applications.
 
 ## 🚀 Live Demo
-
 🔗 https://chatbot-platform-hk6l.vercel.app/
 
 ---
 
 ## 📌 Table of Contents
-
-[About](#about)  
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Getting Started](#getting-started)  
-  - [Prerequisites](#prerequisites)  
-  - [Installation](#installation)  
-  - [Running the App](#running-the-app)  
-- [Project Structure](#project-structure)  
-- [Usage](#usage)   
+- About  
+- Features  
+- Tech Stack  
+- Getting Started  
+- Project Structure  
+- Usage  
 
 ---
 
 ## 📖 About
 
-Chatbot-Platform is a **modular chatbot application** designed to offer conversational interactions with users. It includes both frontend and backend code, providing a scaffold for integrating NLP models or chat APIs. The platform can be extended to include custom chat logic, user authentication, and persistent conversation storage. :contentReference[oaicite:1]{index=1}
+Chatbot Platform is a **modular chatbot application** that provides a scalable foundation for conversational systems. It follows a clean frontend–backend separation and can be extended to integrate AI models, third-party chat APIs, authentication, and persistent conversation storage.
 
 ---
 
 ## ✨ Features
-
-✔ Responsive chat UI  
-✔ Real-time messaging  
-✔ Clear separation between frontend and API backend  
-✔ Easy to customize with ML/NLP models or third-party APIs  
-✔ Deployed and ready for demos :contentReference[oaicite:2]{index=2}
+- Responsive chat user interface  
+- Real-time message handling  
+- Clean separation of frontend and backend  
+- Easily extensible for AI/NLP integration  
+- Deployed and ready for demonstration  
 
 ---
 
 ## 🛠 Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Frontend | HTML, CSS, JavaScript (likely React/Vite) |
-| Backend | Node.js/Express or your preferred API framework |
-| Deployment | Vercel for frontend (and backend proxies if used) |
-| Communication | REST API |
-
-> *If your repo uses a specific framework (e.g., React, Next.js, Express), update this table accordingly.*
+|------|-----------|
+| Frontend | React.js, HTML, CSS, JavaScript |
+| Backend | Node.js, Express.js |
+| API Communication | REST |
+| Deployment | Vercel |
 
 ---
 
 ## 🧰 Getting Started
 
-These instructions will get you a copy of the project up and running locally.
+Follow the steps below to run the project locally.
 
 ### Prerequisites
-
-Install the following tools:
-
-- Node.js (v14+)
+- Node.js (v14 or higher)
 - npm or yarn
 
 ### Installation
 
-1. Clone the repo  
-   ```bash
-   git clone https://github.com/amarsin22/Chatbot-Platform.git
-   cd Chatbot-Platform
+1. Clone the repository
+```bash
+git clone https://github.com/amarsin22/Chatbot-Platform.git
+cd Chatbot-Platform
+```
+2. Install backend dependencies
+   cd backend
+   npm install
 
-## Running the App
+3. Install frontend dependencies
+   cd ../frontend
+   npm install
 
-#Run backend server
-cd backend
-npm run dev
-
-#Run frontend
-cd frontend
-npm start
+## Running the Application
+~Start the backend server
+   cd backend
+   npm run dev
+~Start the frontend
+   cd frontend
+   npm start
 
 ## 🗂 Project Structure
 
 Chatbot-Platform/
-├── backend/        # API server code
+├── backend/
 │   ├── controllers/
 │   ├── routes/
 │   ├── models/
 │   └── server.js
-├── frontend/       # UI code
+├── frontend/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
@@ -98,8 +93,10 @@ Chatbot-Platform/
 └── package.json
 
 ## 📌 Usage
-After running both apps:
-1. Open the UI in your browser.
-2. Enter your message in the chat textbox.
-3. The platform will send your message to the backend.
-4. The backend processes and returns a response (placeholder logic or integrated AI).
+
+1. Open the frontend application in your browser.
+2. Enter a message in the chat input field.
+3. The message is sent to the backend API.
+4. The backend processes the request and returns a response (placeholder logic or integrated AI).
+
+
