@@ -1,39 +1,49 @@
 # System Architecture – Chatbot Platform
 
-This document describes the **overall system architecture**, **component responsibilities**, and **request–response flow** of the Chatbot Platform. The architecture follows industry best practices with a clean separation between frontend, backend, and external services.
+This document describes the **system architecture**, **core components**, and **request–response flow** of the Chatbot Platform. The application follows a scalable, production-ready design with a clear separation between frontend, backend, database, and external AI services.
 
 ---
 
 ## High-Level Architecture Overview
 
-The Chatbot Platform is built using a **client–server architecture**:
+The Chatbot Platform follows a **multi-layer client–server architecture**:
 
-- **Frontend**: Handles user interaction and UI rendering  
-- **Backend**: Manages business logic, API handling, and integrations  
-- **External APIs**: Used for AI/LLM responses (e.g., OpenRouter API)
-
-User → Frontend (React) → Backend (Express API) → AI Service → Backend → Frontend → User
+User
+↓
+Frontend (React)
+↓
+Backend (Express API)
+↓
+MongoDB Atlas (Data Storage)
+↓
+External AI Service (OpenRouter)
+↑
+Backend
+↑
+Frontend
+↑
+User
 
 ---
 
-## Core Components
+## Core Architecture Layers
 
 ### 1. Frontend (Client Layer)
 
 **Technology**: React (Vite), Tailwind CSS
 
 **Responsibilities**:
-- Render chat UI and layouts
+- Render chat interface and layouts
 - Capture user input
 - Send API requests to backend
 - Display chatbot responses
 - Handle loading and error states
 
-**Key Folders**:
+**Key Directories**:
 - `components/` – Reusable UI components
-- `pages/` – Page-level components
-- `services/` – API request logic
-- `layouts/` – UI structure wrappers
+- `pages/` – Page-level views
+- `services/` – API communication logic
+- `layouts/` – Layout wrappers
 - `utils/` – Helper functions
 
 ---
@@ -44,63 +54,82 @@ User → Frontend (React) → Backend (Express API) → AI Service → Backend �
 
 **Responsibilities**:
 - Expose REST APIs
-- Validate incoming requests
+- Validate and process incoming requests
 - Handle business logic
-- Communicate with AI/LLM services
+- Communicate with MongoDB Atlas
+- Integrate with AI/LLM services
 - Return structured responses to frontend
 
-**Key Folders**:
-- `routes/` – API route definitions
-- `controllers/` – Core request handling logic
-- `middleware/` – Authentication, error handling, logging
-- `models/` – Data models (future DB integration)
-- `config/` – Environment & app configuration
+**Key Directories**:
+- `routes/` – API endpoints
+- `controllers/` – Request handling logic
+- `middleware/` – Authentication, validation, error handling
+- `models/` – MongoDB schemas (Mongoose)
+- `config/` – Database & environment configuration
 
 ---
 
-### 3. External AI Service (Integration Layer)
+### 3. Database (Persistence Layer)
+
+**Technology**: MongoDB Atlas
+
+**Responsibilities**:
+- Store chat messages and conversation history
+- Persist user-related data (future scope)
+- Enable scalable and secure cloud-based storage
+
+**Why MongoDB Atlas**:
+- Fully managed cloud database
+- Horizontal scalability
+- High availability and automated backups
+- Secure access via connection strings and IP whitelisting
+
+---
+
+### 4. External AI Service (Integration Layer)
 
 **Example**: OpenRouter API
 
 **Responsibilities**:
-- Process user input
-- Generate AI-based responses
-- Return structured chatbot replies
+- Process user prompts
+- Generate AI-driven responses
+- Return structured conversational output
 
-This layer is **decoupled** from the backend, allowing easy replacement or extension with other AI providers.
+This layer is loosely coupled, allowing easy replacement or extension with other AI providers.
 
 ---
 
-## Detailed Request Flow
+## Detailed Request Flow (End-to-End)
 
-### Step-by-Step Message Flow
+### Step-by-Step Flow
 
 1. **User Input**
-   - User types a message into the chat interface.
+   - User types a message in the chat UI.
 
 2. **Frontend → Backend**
-   - Frontend sends a `POST` request to the backend API.
-   - Request includes the user message payload.
+   - Frontend sends a `POST` request with the user message.
 
-3. **Backend Processing**
-   - Request passes through middleware (validation, logging).
-   - Controller receives the request.
-   - Business logic processes the message.
+3. **Request Validation**
+   - Backend middleware validates request payload and headers.
 
-4. **Backend → AI Service**
-   - Backend sends the processed input to the AI/LLM API.
-   - API key and configuration are managed via environment variables.
+4. **Database Interaction**
+   - Backend stores the user message in **MongoDB Atlas**.
+   - Conversation context is retrieved if available.
 
-5. **AI Service Response**
-   - AI service returns a generated response.
+5. **Backend → AI Service**
+   - Message and context are sent to the OpenRouter API.
 
-6. **Backend → Frontend**
-   - Backend formats the response.
-   - Sends a clean JSON response to the frontend.
+6. **AI Response**
+   - AI service generates and returns a response.
 
-7. **UI Update**
-   - Frontend updates the chat interface.
-   - Chatbot response is displayed to the user.
+7. **Response Persistence**
+   - Backend stores the AI response in MongoDB Atlas.
+
+8. **Backend → Frontend**
+   - Backend sends formatted response data to frontend.
+
+9. **UI Update**
+   - Frontend updates the chat interface in real time.
 
 ---
 
@@ -109,38 +138,39 @@ This layer is **decoupled** from the backend, allowing easy replacement or exten
 - **Protocol**: REST
 - **Data Format**: JSON
 - **Error Handling**:
-  - Centralized middleware
+  - Centralized error middleware
   - Standard HTTP status codes
-  - User-friendly frontend messages
-
----
-
-## Scalability & Extensibility
-
-The architecture supports future enhancements such as:
-- Database integration for chat history
-- User authentication and roles
-- Multiple chatbot agents
-- Conversation memory and context handling
-- Load balancing and horizontal scaling
+  - User-friendly frontend messaging
 
 ---
 
 ## Security Considerations
 
-- Environment variables stored in `.env`
+- MongoDB Atlas credentials stored in `.env`
 - API keys never exposed to frontend
-- CORS and request validation middleware
-- Ready for authentication middleware integration
+- Secure database access via IP whitelisting
+- Input validation and sanitization middleware
+- Ready for authentication and authorization layers
+
+---
+
+## Scalability & Future Enhancements
+
+- Conversation memory and context management
+- User authentication and session handling
+- Role-based access control
+- Multi-agent chatbot support
+- Horizontal scaling using cloud infrastructure
+- Caching frequently used responses
 
 ---
 
 ## Summary
 
-The Chatbot Platform uses a **clean, modular, and scalable architecture** designed for real-world conversational applications. The clear separation of responsibilities ensures maintainability, extensibility, and smooth integration with AI services.
+The Chatbot Platform architecture is designed to be **modular, scalable, and production-ready**. The integration of **MongoDB Atlas** enables persistent data storage, while the decoupled AI service layer allows flexibility in adopting advanced conversational models.
 
-This architecture is suitable for:
-- Production-ready chatbot systems
-- Portfolio demonstration
-- Technical interviews
-- AI product prototyping
+This architecture is ideal for:
+- AI-powered chatbot systems
+- Cloud-native applications
+- Portfolio and interview demonstrations
+- Real-world conversational products
