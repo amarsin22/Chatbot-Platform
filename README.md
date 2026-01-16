@@ -1,6 +1,6 @@
 # Chatbot Platform
 
-A full-stack **Chatbot Platform** with a clear separation between frontend and backend, designed to allow users to interact with an intelligent chatbot interface. The project is built with scalability and extensibility in mind, making it suitable for real-world conversational applications.
+A full-stack **Chatbot Platform** built with a clean separation between frontend and backend, designed for real-world conversational applications. The system supports AI-powered responses, persistent chat storage using MongoDB Atlas, and a scalable architecture suitable for production use.
 
 ---
 
@@ -15,15 +15,19 @@ A full-stack **Chatbot Platform** with a clear separation between frontend and b
 - About  
 - Features  
 - Tech Stack  
+- Architecture Overview  
 - Getting Started  
 - Project Structure  
 - Usage  
+- Future Enhancements  
 
 ---
 
 ## 📖 About
 
-**Chatbot Platform** is a modular and scalable chatbot application that follows a clean frontend–backend architecture. It serves as a strong foundation for building conversational systems and can be extended to integrate AI/LLM models, third-party chat APIs, authentication, and persistent conversation storage.
+**Chatbot Platform** is a modular and scalable chatbot application that allows users to interact with an intelligent conversational interface. It follows industry best practices with a clear frontend–backend separation and supports persistent data storage using MongoDB Atlas.
+
+The platform is designed to be easily extensible for AI/LLM integrations, authentication, and advanced conversation management.
 
 ---
 
@@ -31,9 +35,11 @@ A full-stack **Chatbot Platform** with a clear separation between frontend and b
 
 - Responsive and modern chat user interface  
 - Real-time message handling  
-- Clean separation of frontend and backend  
-- Easily extensible for AI/NLP integration  
-- Deployed and ready for demonstration  
+- Clean frontend–backend separation  
+- AI-powered responses via OpenRouter API  
+- Persistent chat storage using MongoDB Atlas  
+- Secure environment-based configuration  
+- Deployed and production-ready  
 
 ---
 
@@ -43,8 +49,31 @@ A full-stack **Chatbot Platform** with a clear separation between frontend and b
 |------|-----------|
 | Frontend | React (Vite), Tailwind CSS |
 | Backend | Node.js, Express.js |
-| API Communication | REST, OpenRouter API |
-| Deployment | Vercel, Render |
+| Database | MongoDB Atlas |
+| AI Integration | OpenRouter API |
+| API Communication | REST (JSON) |
+| Deployment | Vercel (Frontend), Render (Backend) |
+
+---
+
+## 🏗 Architecture Overview
+
+The application follows a **multi-layer architecture**:
+
+User → Frontend (React)
+→ Backend (Express API)
+→ MongoDB Atlas (Persistence)
+→ OpenRouter API (AI Response)
+→ Backend
+→ Frontend
+
+
+- Frontend handles UI and user interaction  
+- Backend manages business logic and integrations  
+- MongoDB Atlas stores chat conversations  
+- OpenRouter API generates AI-driven responses  
+
+Detailed request flow is documented in `ARCHITECTURE.md`.
 
 ---
 
@@ -56,6 +85,10 @@ Follow the steps below to run the project locally.
 
 - Node.js (v14 or higher)
 - npm or yarn
+- MongoDB Atlas account
+- OpenRouter API key
+
+---
 
 ### Installation
 
@@ -64,10 +97,16 @@ Follow the steps below to run the project locally.
 git clone https://github.com/amarsin22/Chatbot-Platform.git
 cd Chatbot-Platform
 ```
-2. Install backend dependencies
+2. Backend setup
    cd backend
-   npm install   
-4. Install frontend dependencies
+   npm install
+   
+Create a .env file inside backend/:
+PORT=5000
+MONGODB_URI=your_mongodb_atlas_connection_string
+OPENROUTER_API_KEY=your_openrouter_api_key
+
+4. Frontend setup
    cd ../frontend
    npm install
 
@@ -75,58 +114,66 @@ cd Chatbot-Platform
 1. Start the backend server
    cd backend
    npm run dev
-2. Start the frontend application
+2. Start the frontend
    cd frontend
    npm run dev
 
 ## 🗂 Project Structure
-
 Chatbot-Platform/
 │
 ├── backend/
-│   ├── config/              # Configuration files (DB, API keys, app config)
-│   ├── controllers/         # Request handling & business logic
-│   ├── middleware/          # Custom middlewares (auth, error handling)
-│   ├── models/              # Database models / schemas
-│   ├── routes/              # API route definitions
-│   ├── node_modules/
-│   ├── .env                 # Environment variables
-│   ├── .gitignore
-│   ├── package.json
-│   ├── package-lock.json
-│   └── server.js            # Backend entry point
+│   ├── config/              # DB & app configuration
+│   ├── controllers/         # Business logic
+│   ├── middleware/          # Validation & error handling
+│   ├── models/              # MongoDB schemas
+│   ├── routes/              # API routes
+│   ├── .env
+│   ├── server.js            # Backend entry point
+│   └── package.json
 │
 ├── frontend/
-│   ├── public/              # Static assets
+│   ├── public/
 │   ├── src/
-│   │   ├── assets/          # Images, icons, fonts
+│   │   ├── assets/          # Images & static assets
 │   │   ├── components/      # Reusable UI components
-│   │   ├── layouts/         # Layout components (wrappers, shells)
+│   │   ├── layouts/         # Layout wrappers
 │   │   ├── pages/           # Application pages
-│   │   ├── services/        # API calls & service logic
-│   │   ├── utils/           # Helper & utility functions
-│   │   ├── App.css
+│   │   ├── services/        # API calls
+│   │   ├── utils/           # Helper functions
 │   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx         # Frontend entry point
-│   │
-│   ├── node_modules/
-│   ├── .gitignore
-│   ├── eslint.config.js
-│   ├── index.html
-│   ├── package.json
-│   └── package-lock.json
+│   │   └── main.jsx
+│   └── package.json
 │
-└── README.md
+├── README.md
+└── ARCHITECTURE.md
 
 ## 📌 Usage
-1. Open the frontend application in your browser.
-2. Enter a message in the chat input field.
-3. The message is sent to the backend API.
-4. The backend processes the request and returns a response (placeholder logic or integrated AI).
+1. Open the frontend application in your browser
+2. Enter a message in the chat input
+3. The message is sent to the backend API
+4. Backend stores the message in MongoDB Atlas
+5. Message is forwarded to OpenRouter API
+6. AI response is saved and returned to the frontend
+7. Chat UI updates in real time
+
+## 🚧 Future Enhancements
+1. User authentication and authorization
+2. Chat history and conversation context memory
+3. Multi-agent chatbot support
+4. Role-based dashboards
+5. Caching and performance optimization
+6. CI/CD pipeline integration
+
+## 🎯 Purpose
+This project demonstrates:
+1. Full-stack development skills
+2. Clean and scalable system architecture
+3. AI API integration
+4. Cloud database usage with MongoDB Atlas
+
+It is suitable for portfolio showcase, technical interviews, and real-world chatbot systems.
 
 ## 👨‍💻 Author
-   Amar Singh
-   GitHub: https://github.com/amarsin22
-
+Amar Singh
+GitHub: https://github.com/amarsin22
 
