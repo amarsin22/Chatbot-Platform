@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import DashboardLayout from "../layouts/DashboardLayout"
 import CreateProjectModal from "../components/CreateProjectModal"
 import ProjectCard from "../components/ProjectCard"
+import LogoutConfirmModal from "../components/LogoutConfirmModal"
+import SuccessToast from "../components/SuccessToast"
 import api from "../services/api"
 import { Search, Plus } from "lucide-react"
 
@@ -12,6 +14,8 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([])
   const [search, setSearch] = useState("")
   const [showModal, setShowModal] = useState(false)
+  const [showLogout, setShowLogout] = useState(false)
+  const [showLogoutToast, setShowLogoutToast] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
@@ -38,9 +42,15 @@ export default function Dashboard() {
     fetchProjects()
   }, [fetchProjects])
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    navigate("/")
+  // ✅ Logout with toast + delay
+  const confirmLogout = () => {
+    setShowLogout(false)
+    setShowLogoutToast(true)
+
+    setTimeout(() => {
+      localStorage.removeItem("token")
+      navigate("/")
+    }, 1200)
   }
 
   const filteredProjects = projects
@@ -73,7 +83,7 @@ export default function Dashboard() {
             </button>
 
             <button
-              onClick={handleLogout}
+              onClick={() => setShowLogout(true)}
               className="px-4 py-2 rounded-lg text-sm border text-gray-600 hover:bg-gray-100"
             >
               Logout
@@ -121,12 +131,26 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Create Project Modal */}
       {showModal && (
         <CreateProjectModal
           onClose={() => setShowModal(false)}
           onCreated={fetchProjects}
         />
       )}
+
+      {/* Logout Confirm Modal */}
+      <LogoutConfirmModal
+        open={showLogout}
+        onCancel={() => setShowLogout(false)}
+        onConfirm={confirmLogout}
+      />
+
+      {/* ✅ Success Toast */}
+      <SuccessToast
+        show={showLogoutToast}
+        message="Logged out successfully"
+      />
     </DashboardLayout>
   )
 }
