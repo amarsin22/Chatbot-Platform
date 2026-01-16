@@ -1,81 +1,146 @@
 # System Architecture – Chatbot Platform
 
-## 1. Architecture Overview
-
-The Chatbot Platform follows a **client–server architecture** with a clear separation between frontend and backend.  
-The frontend handles user interaction and UI rendering, while the backend processes requests and generates chatbot responses.
-
-The frontend and backend communicate using **RESTful APIs** over HTTP.
+This document describes the **overall system architecture**, **component responsibilities**, and **request–response flow** of the Chatbot Platform. The architecture follows industry best practices with a clean separation between frontend, backend, and external services.
 
 ---
 
-## 2. High-Level Architecture Flow
+## High-Level Architecture Overview
 
-User  
-↓  
-Frontend (React + Vite + Tailwind CSS)  
-↓ REST API  
-Backend (Node.js + Express)  
-↓  
-Chat Logic / AI Integration  
+The Chatbot Platform is built using a **client–server architecture**:
+
+- **Frontend**: Handles user interaction and UI rendering  
+- **Backend**: Manages business logic, API handling, and integrations  
+- **External APIs**: Used for AI/LLM responses (e.g., OpenRouter API)
+
+User → Frontend (React) → Backend (Express API) → AI Service → Backend → Frontend → User
 
 ---
 
-## 3. Frontend Architecture
+## Core Components
 
-### Technology Stack
-- React.js
-- Vite
-- Tailwind CSS
-- JavaScript
-- Deployed on Vercel
+### 1. Frontend (Client Layer)
 
-### Responsibilities
-- Render chat user interface
+**Technology**: React (Vite), Tailwind CSS
+
+**Responsibilities**:
+- Render chat UI and layouts
 - Capture user input
-- Send messages to backend API
+- Send API requests to backend
 - Display chatbot responses
-- Handle UI states (loading, messages, errors)
+- Handle loading and error states
 
-### Frontend Flow
-1. User types a message in the chat input.
-2. The message is sent to the backend using a REST API request.
-3. The UI waits for the response.
-4. The chatbot reply is displayed in the chat window.
+**Key Folders**:
+- `components/` – Reusable UI components
+- `pages/` – Page-level components
+- `services/` – API request logic
+- `layouts/` – UI structure wrappers
+- `utils/` – Helper functions
 
 ---
 
-## 4. Backend Architecture
+### 2. Backend (Application Layer)
 
-### Technology Stack
-- Node.js
-- Express.js
-- REST API
+**Technology**: Node.js, Express.js
 
-### Responsibilities
-- Receive chat messages from frontend
+**Responsibilities**:
+- Expose REST APIs
 - Validate incoming requests
-- Execute chatbot logic (placeholder or AI-based)
-- Send responses back to the frontend
+- Handle business logic
+- Communicate with AI/LLM services
+- Return structured responses to frontend
 
-### Backend Flow
-1. Backend receives a POST request from the frontend.
-2. Request data is validated.
-3. Chat logic processes the message.
-4. A response is generated.
-5. Response is returned as JSON.
+**Key Folders**:
+- `routes/` – API route definitions
+- `controllers/` – Core request handling logic
+- `middleware/` – Authentication, error handling, logging
+- `models/` – Data models (future DB integration)
+- `config/` – Environment & app configuration
 
 ---
 
-## 5. API Communication
+### 3. External AI Service (Integration Layer)
 
-### Sample Request
-```json
-{
-  "message": "Hello"
-}
+**Example**: OpenRouter API
 
-### Sample Response
-{
-  "reply": "Hi! How can I help you?"
-}
+**Responsibilities**:
+- Process user input
+- Generate AI-based responses
+- Return structured chatbot replies
+
+This layer is **decoupled** from the backend, allowing easy replacement or extension with other AI providers.
+
+---
+
+## Detailed Request Flow
+
+### Step-by-Step Message Flow
+
+1. **User Input**
+   - User types a message into the chat interface.
+
+2. **Frontend → Backend**
+   - Frontend sends a `POST` request to the backend API.
+   - Request includes the user message payload.
+
+3. **Backend Processing**
+   - Request passes through middleware (validation, logging).
+   - Controller receives the request.
+   - Business logic processes the message.
+
+4. **Backend → AI Service**
+   - Backend sends the processed input to the AI/LLM API.
+   - API key and configuration are managed via environment variables.
+
+5. **AI Service Response**
+   - AI service returns a generated response.
+
+6. **Backend → Frontend**
+   - Backend formats the response.
+   - Sends a clean JSON response to the frontend.
+
+7. **UI Update**
+   - Frontend updates the chat interface.
+   - Chatbot response is displayed to the user.
+
+---
+
+## API Communication
+
+- **Protocol**: REST
+- **Data Format**: JSON
+- **Error Handling**:
+  - Centralized middleware
+  - Standard HTTP status codes
+  - User-friendly frontend messages
+
+---
+
+## Scalability & Extensibility
+
+The architecture supports future enhancements such as:
+- Database integration for chat history
+- User authentication and roles
+- Multiple chatbot agents
+- Conversation memory and context handling
+- Load balancing and horizontal scaling
+
+---
+
+## Security Considerations
+
+- Environment variables stored in `.env`
+- API keys never exposed to frontend
+- CORS and request validation middleware
+- Ready for authentication middleware integration
+
+---
+
+## Summary
+
+The Chatbot Platform uses a **clean, modular, and scalable architecture** designed for real-world conversational applications. The clear separation of responsibilities ensures maintainability, extensibility, and smooth integration with AI services.
+
+This architecture is suitable for:
+- Production-ready chatbot systems
+- Portfolio demonstration
+- Technical interviews
+- AI product prototyping
