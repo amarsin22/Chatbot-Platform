@@ -1,176 +1,84 @@
-# System Architecture – Chatbot Platform
+# System Architecture & Design
 
-This document describes the **system architecture**, **core components**, and **request–response flow** of the Chatbot Platform. The application follows a scalable, production-ready design with a clear separation between frontend, backend, database, and external AI services.
-
----
-
-## High-Level Architecture Overview
-
-The Chatbot Platform follows a **multi-layer client–server architecture**:
-
-User
-↓
-Frontend (React)
-↓
-Backend (Express API)
-↓
-MongoDB Atlas (Data Storage)
-↓
-External AI Service (OpenRouter)
-↑
-Backend
-↑
-Frontend
-↑
-User
+## 1. Overview
+This project is a full-stack web application designed to provide a responsive and scalable user experience.  
+It follows a client-server architecture with a clear separation of frontend, backend, and database layers.
 
 ---
 
-## Core Architecture Layers
+## 2. High-Level Architecture
+The system consists of three main components:
 
-### 1. Frontend (Client Layer)
+- Frontend (Client)
+- Backend (Server / API)
+- Database
 
-**Technology**: React (Vite), Tailwind CSS
-
-**Responsibilities**:
-- Render chat interface and layouts
-- Capture user input
-- Send API requests to backend
-- Display chatbot responses
-- Handle loading and error states
-
-**Key Directories**:
-- `components/` – Reusable UI components
-- `pages/` – Page-level views
-- `services/` – API communication logic
-- `layouts/` – Layout wrappers
-- `utils/` – Helper functions
+The frontend communicates with the backend via RESTful APIs, and the backend interacts with the database to store and retrieve data.
 
 ---
 
-### 2. Backend (Application Layer)
+## 3. Frontend Architecture
+**Technology Stack:**
+- React.js
+- Tailwind CSS
+- Framer Motion (animations)
 
-**Technology**: Node.js, Express.js
-
-**Responsibilities**:
-- Expose REST APIs
-- Validate and process incoming requests
-- Handle business logic
-- Communicate with MongoDB Atlas
-- Integrate with AI/LLM services
-- Return structured responses to frontend
-
-**Key Directories**:
-- `routes/` – API endpoints
-- `controllers/` – Request handling logic
-- `middleware/` – Authentication, validation, error handling
-- `models/` – MongoDB schemas (Mongoose)
-- `config/` – Database & environment configuration
+**Responsibilities:**
+- User Interface and UX
+- Form validation
+- API integration
+- State management
 
 ---
 
-### 3. Database (Persistence Layer)
+## 4. Backend Architecture
+**Technology Stack:**
+- Node.js
+- Express.js
 
-**Technology**: MongoDB Atlas
-
-**Responsibilities**:
-- Store chat messages and conversation history
-- Persist user-related data (future scope)
-- Enable scalable and secure cloud-based storage
-
-**Why MongoDB Atlas**:
-- Fully managed cloud database
-- Horizontal scalability
-- High availability and automated backups
-- Secure access via connection strings and IP whitelisting
+**Responsibilities:**
+- Authentication & authorization
+- Business logic
+- API endpoints
+- Request validation
 
 ---
 
-### 4. External AI Service (Integration Layer)
+## 5. Database Design
+**Technology:**
+- MongoDB (Atlas)
 
-**Example**: OpenRouter API
-
-**Responsibilities**:
-- Process user prompts
-- Generate AI-driven responses
-- Return structured conversational output
-
-This layer is loosely coupled, allowing easy replacement or extension with other AI providers.
+**Responsibilities:**
+- Persistent data storage
+- User data management
+- Indexing for performance
 
 ---
 
-## Detailed Request Flow (End-to-End)
-
-### Step-by-Step Flow
-
-1. **User Input**
-   - User types a message in the chat UI.
-
-2. **Frontend → Backend**
-   - Frontend sends a `POST` request with the user message.
-
-3. **Request Validation**
-   - Backend middleware validates request payload and headers.
-
-4. **Database Interaction**
-   - Backend stores the user message in **MongoDB Atlas**.
-   - Conversation context is retrieved if available.
-
-5. **Backend → AI Service**
-   - Message and context are sent to the OpenRouter API.
-
-6. **AI Response**
-   - AI service generates and returns a response.
-
-7. **Response Persistence**
-   - Backend stores the AI response in MongoDB Atlas.
-
-8. **Backend → Frontend**
-   - Backend sends formatted response data to frontend.
-
-9. **UI Update**
-   - Frontend updates the chat interface in real time.
+## 6. Data Flow
+1. User interacts with the frontend UI.
+2. Frontend sends API requests to the backend.
+3. Backend processes the request and communicates with the database.
+4. Database returns data to the backend.
+5. Backend sends the response back to the frontend.
 
 ---
 
-## API Communication
-
-- **Protocol**: REST
-- **Data Format**: JSON
-- **Error Handling**:
-  - Centralized error middleware
-  - Standard HTTP status codes
-  - User-friendly frontend messaging
+## 7. Security Considerations
+- Environment variables for secrets
+- JWT-based authentication
+- Input validation
+- HTTPS in production
 
 ---
 
-## Security Considerations
-
-- MongoDB Atlas credentials stored in `.env`
-- API keys never exposed to frontend
-- Secure database access via IP whitelisting
-- Input validation and sanitization middleware
-- Ready for authentication and authorization layers
+## 8. Scalability & Performance
+- Modular code structure
+- API-based design
+- Database indexing
+- Ready for horizontal scaling
 
 ---
 
-## Scalability & Future Enhancements
-
-- Conversation memory and context management
-- User authentication and session handling
-- Role-based access control
-- Multi-agent chatbot support
-- Horizontal scaling using cloud infrastructure
-- Caching frequently used responses
-
----
-
-## Summary
-
-The Chatbot Platform architecture is designed to be **modular, scalable, and production-ready**. The integration of **MongoDB Atlas** enables persistent data storage, while the decoupled AI service layer allows flexibility in adopting advanced conversational models.
-
-This architecture is ideal for:
-- AI-powered chatbot systems
-- Cloud-native applications
-- Portfolio and interview demonstrations
-- Real-world conversational products
+## 9. Conclusion
+This architecture ensures maintainability, scalability, and a clean separation of concerns, making the application suitable for production-level deployment.
