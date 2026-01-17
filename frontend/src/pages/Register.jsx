@@ -1,44 +1,47 @@
-import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
-import AuthLayout from "../components/AuthLayout"
-import api from "../services/api"
-import { Loader2 } from "lucide-react"
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import AuthLayout from "../components/AuthLayout";
+import api from "../services/api";
+import { Loader2 } from "lucide-react";
 
 export default function Register() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault();
+    setError("");
 
     if (!email || !password) {
-      setError("All fields are required")
-      return
+      setError("All fields are required");
+      return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters")
-      return
+      setError("Password must be at least 6 characters");
+      return;
     }
 
     try {
-      setLoading(true)
-      await api.post("/auth/register", {
-        email,
-        password,
-      })
-      navigate("/login")
+      setLoading(true);
+
+      await api.post("/auth/register", { email, password });
+
+      // ✅ PASS REGISTER SUCCESS STATE
+      navigate("/login", {
+        state: { registerSuccess: true },
+        replace: true,
+      });
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed")
+      setError(err.response?.data?.message || "Registration failed");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <AuthLayout
@@ -70,7 +73,7 @@ export default function Register() {
 
         <button
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60"
         >
           {loading && <Loader2 size={16} className="animate-spin" />}
           Register
@@ -84,5 +87,5 @@ export default function Register() {
         </p>
       </form>
     </AuthLayout>
-  )
+  );
 }

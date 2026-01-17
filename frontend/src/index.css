@@ -50,6 +50,22 @@
   animation: messageIn 0.2s ease-out;
 }
 
+/* ---------------- SUCCESS TOAST ---------------- */
+@keyframes fadeInToast {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInToast 0.25s ease-out;
+}
+
 /* ---------------- TYPING DOTS ---------------- */
 .dot {
   width: 6px;

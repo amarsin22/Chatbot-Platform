@@ -1,63 +1,81 @@
-import { useEffect, useState, useCallback } from "react"
-import { useNavigate } from "react-router-dom"
-import DashboardLayout from "../layouts/DashboardLayout"
-import CreateProjectModal from "../components/CreateProjectModal"
-import ProjectCard from "../components/ProjectCard"
-import LogoutConfirmModal from "../components/LogoutConfirmModal"
-import SuccessToast from "../components/SuccessToast"
-import api from "../services/api"
-import { Search, Plus } from "lucide-react"
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import DashboardLayout from "../layouts/DashboardLayout";
+import CreateProjectModal from "../components/CreateProjectModal";
+import ProjectCard from "../components/ProjectCard";
+import LogoutConfirmModal from "../components/LogoutConfirmModal";
+import SuccessToast from "../components/SuccessToast";
+import api from "../services/api";
+import { Search, Plus } from "lucide-react";
 
 export default function Dashboard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [projects, setProjects] = useState([])
-  const [search, setSearch] = useState("")
-  const [showModal, setShowModal] = useState(false)
-  const [showLogout, setShowLogout] = useState(false)
-  const [showLogoutToast, setShowLogoutToast] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  const [projects, setProjects] = useState([]);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // 🔐 Auth guard
+  /* 🔐 AUTH GUARD (RUNS FIRST) */
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (!token) navigate("/")
-  }, [navigate])
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+
+  /* ✅ LOGIN SUCCESS TOAST */
+  useEffect(() => {
+    if (location.state?.loginSuccess) {
+      setToastMessage("Login successful 🎉");
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+        navigate(location.pathname, { replace: true });
+      }, 2500);
+    }
+  }, [location, navigate]);
 
   const fetchProjects = useCallback(async () => {
     try {
-      setLoading(true)
-      setError("")
-      const res = await api.get("/projects")
-      setProjects(res.data)
+      setLoading(true);
+      setError("");
+      const res = await api.get("/projects");
+      setProjects(res.data);
     } catch {
-      setError("Failed to load projects")
+      setError("Failed to load projects");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    fetchProjects()
-  }, [fetchProjects])
+    fetchProjects();
+  }, [fetchProjects]);
 
-  // ✅ Logout with toast + delay
+  /* ✅ LOGOUT HANDLER */
   const confirmLogout = () => {
-    setShowLogout(false)
-    setShowLogoutToast(true)
+    setShowLogout(false);
+    setToastMessage("Logged out successfully");
+    setShowToast(true);
 
     setTimeout(() => {
-      localStorage.removeItem("token")
-      navigate("/")
-    }, 1200)
-  }
+      localStorage.removeItem("token");
+      navigate("/", { replace: true });
+    }, 1200);
+  };
 
   const filteredProjects = projects
     .filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase())
     )
-    .sort((a, b) => Number(b.isPinned) - Number(a.isPinned))
+    .sort((a, b) => Number(b.isPinned) - Number(a.isPinned));
 
   return (
     <DashboardLayout>
@@ -131,7 +149,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Create Project Modal */}
+      {/* MODALS */}
       {showModal && (
         <CreateProjectModal
           onClose={() => setShowModal(false)}
@@ -139,18 +157,14 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Logout Confirm Modal */}
       <LogoutConfirmModal
         open={showLogout}
         onCancel={() => setShowLogout(false)}
         onConfirm={confirmLogout}
       />
 
-      {/* ✅ Success Toast */}
-      <SuccessToast
-        show={showLogoutToast}
-        message="Logged out successfully"
-      />
+      {/* ✅ SUCCESS TOAST */}
+      <SuccessToast show={showToast} message={toastMessage} />
     </DashboardLayout>
-  )
+  );
 }
